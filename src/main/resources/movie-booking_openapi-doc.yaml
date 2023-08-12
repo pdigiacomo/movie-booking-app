@@ -6,7 +6,7 @@ info:
 servers:
   - url: /v1
 paths:
-  /movies:
+  /movie:
     get:
       summary: Get a list of all the movies as well as the number of available seats for each movie
       tags:
@@ -65,6 +65,7 @@ paths:
           name: bookingId
           schema:
             type: integer
+            format: int64
           required: true
       responses:
         '204':
@@ -86,6 +87,7 @@ components:
           enum: [success, error]
         count:
           type: integer
+          format: int64
         type:
           type: string
     MovieList:
@@ -101,10 +103,11 @@ components:
                 $ref: '#/components/schemas/Movie'
     Movie:
       type: object
-      required: [movieId, title, availableSeats]
+      required: [movieId, title, startDatetime, availableSeats]
       properties:
         movieId:
           type: integer
+          format: int64
         title:
           type: string
         startDatetime:
@@ -150,11 +153,16 @@ components:
           nullable: true
     Booking:
       type: object
-      required: [userId, movieId, nSeatsBooked]
+      required: [bookingId, userId, movieId, nSeatsBooked]
       properties:
+        bookingId:
+          type: integer
+          format: int64
         userId:
           type: integer
+          format: int64
         movieId:
           type: integer
+          format: int64
         nSeatsBooked:
           type: integer
