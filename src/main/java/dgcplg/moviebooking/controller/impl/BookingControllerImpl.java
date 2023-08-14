@@ -29,9 +29,6 @@ public class BookingControllerImpl implements BookingController {
     @Override
     public BookingDTO bookMovieSeats(long movieId, long userId, int nSeatsBooked) {
         MovieEntity bookingMovie = movieRepository.getReferenceById(movieId);
-        if (bookingMovie.getAvailableSeats() - nSeatsBooked < 0) {
-            // throw exc and roll back transaction
-        }
         UserEntity bookingUser = userRepository.getReferenceById(userId);
         BookingEntity newBooking = new BookingEntity();
         newBooking.setMovie(bookingMovie);

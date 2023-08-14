@@ -41,7 +41,7 @@ public class BookingServiceImpl implements BookingApiDelegate {
                         bookingDTO.getnSeatsBooked()
                 ).bookingId(bookingDTO.getBookingId())
         );
-        return new ResponseEntity<>(bookingResponse, HttpStatus.OK);
+        return new ResponseEntity<>(bookingResponse, HttpStatus.CREATED);
     }
 
     @Override
