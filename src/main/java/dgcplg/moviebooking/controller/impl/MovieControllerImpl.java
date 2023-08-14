@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -31,16 +30,32 @@ public class MovieControllerImpl implements MovieController {
     }
 
     @Override
-    public MovieListDTO getAllMovies(int page) {
+    public MovieListDTO getAllMovies() {
         Stream<MovieEntity> movieStream;
         long recordCount = movieRepository.count();
         if (recordCount > this.recordLimit) {
-            Pageable moviePageable = PageRequest.of(page, this.chunkSize);
+            Pageable moviePageable = PageRequest.of(0, this.chunkSize);
             Page<MovieEntity> moviePage = movieRepository.findAll(moviePageable);
             movieStream = moviePage.get();
         } else {
             movieStream = movieRepository.findAll().stream();
         }
+        List<Movie> movieList = movieStream
+                .map(e -> new Movie(
+                        e.getMovieId(),
+                        e.getTitle(),
+                        e.getStartDateTime(),
+                        e.getAvailableSeats()
+                ))
+                .toList();
+        return new MovieListDTO(movieList, recordCount);
+    }
+
+    @Override
+    public MovieListDTO getAllMovies(int page) {
+        Pageable moviePageable = PageRequest.of(page-1, this.chunkSize);
+        Page<MovieEntity> moviePage = movieRepository.findAll(moviePageable);
+        Stream<MovieEntity> movieStream = moviePage.get();
         List<Movie> movieList = movieStream
             .map(e -> new Movie(
                     e.getMovieId(),
@@ -49,6 +64,6 @@ public class MovieControllerImpl implements MovieController {
                     e.getAvailableSeats()
             ))
             .toList();
-        return new MovieListDTO(movieList, recordCount);
+        return new MovieListDTO(movieList, moviePage.getTotalElements());
     }
 }

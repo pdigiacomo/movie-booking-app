@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
  * <p>IT class for e2e-testing of the {@link dgcplg.moviebooking.service.MovieServiceImpl#getAllMovies(Integer) getAllMovies} service.</p>
  * Here the class invokes the service method retrieving all of the records in the database, without hitting the server's limit.
  * <br />
- * After receiving the ResponseEntity from the server, the object is tested to make sure:
+ * After receiving the {@link <a href="https://docs.spring.io/spring-framework/docs/6.0.11/javadoc-api/org/springframework/http/ResponseEntity.html">ResponseEntity</a>} from the server, the object is tested to make sure that:
  * <ul>
  *     <li>the response status code is 200</li>
  *     <li>the response body is not empty</li>
@@ -22,13 +22,13 @@ import org.springframework.http.ResponseEntity;
  * </ul>
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = OpenApiGeneratorApplication.class)
-public class GetAllMoviesIT {
+public class GetAllMoviesNoLimitIT {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
 
     @Test
-    public void getAllMovies_ok_noRecordLimit_noPaging() {
+    public void getAllMovies_ok_noRecordLimit() {
         ResponseEntity<MovieList> movieListEntity = testRestTemplate.getForEntity(
                 "/v1/movie",
                 MovieList.class

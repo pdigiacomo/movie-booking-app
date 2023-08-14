@@ -10,13 +10,13 @@ public class BookingEntity {
     @Column(name = "booking_id")
     private long bookingId;
 
-    @ManyToOne
-    @JoinColumn(nullable = false, name = "user_id")
-    private UserEntity user;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "movie_id")
     private MovieEntity movie;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, name = "user_id")
+    private UserEntity user;
 
     @Column(nullable = false, name = "n_seats_booked")
     private int nSeatsBooked;
@@ -31,20 +31,20 @@ public class BookingEntity {
         this.bookingId = bookingId;
     }
 
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
-
     public MovieEntity getMovie() {
         return movie;
     }
 
     public void setMovie(MovieEntity movie) {
         this.movie = movie;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
     public int getnSeatsBooked() {
@@ -59,8 +59,8 @@ public class BookingEntity {
     public String toString() {
         return "BookingEntity{" +
                 "bookingId=" + bookingId +
-                ", user=" + user +
                 ", movie=" + movie +
+                ", user=" + user +
                 ", nSeatsBooked=" + nSeatsBooked +
                 '}';
     }

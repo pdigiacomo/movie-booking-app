@@ -8,15 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(
-        isolation = Isolation.READ_COMMITTED,
-        propagation = Propagation.SUPPORTS,
-        timeout = 30)
 public class MovieServiceImpl implements MovieApiDelegate {
 
     private final MovieController movieController;
@@ -27,16 +20,10 @@ public class MovieServiceImpl implements MovieApiDelegate {
     }
 
     @Override
-    @Transactional(
-//            rollbackFor = ,
-//            noRollbackFor = ,
-//            rollbackForClassName = ,
-//            noRollbackForClassName = ,
-            readOnly = true)
     public ResponseEntity<MovieList> getAllMovies(Integer offset) {
         MovieListDTO movieListDTO;
         if (offset == null || offset < 1) {
-            movieListDTO = movieController.getAllMovies(0);
+            movieListDTO = movieController.getAllMovies();
         } else {
             movieListDTO = movieController.getAllMovies(offset);
         }
