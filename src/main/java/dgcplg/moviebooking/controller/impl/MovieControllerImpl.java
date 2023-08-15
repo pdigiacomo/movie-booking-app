@@ -3,6 +3,7 @@ package dgcplg.moviebooking.controller.impl;
 import dgcplg.moviebooking.controller.MovieController;
 import dgcplg.moviebooking.controller.dto.MovieListDTO;
 import dgcplg.moviebooking.model.Movie;
+import dgcplg.moviebooking.model.SearchPayloadDataInner;
 import dgcplg.moviebooking.repository.MovieRepository;
 import dgcplg.moviebooking.repository.entity.MovieEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +41,13 @@ public class MovieControllerImpl implements MovieController {
         } else {
             movieStream = movieRepository.findAll().stream();
         }
-        List<Movie> movieList = movieStream
-                .map(e -> new Movie(
-                        e.getMovieId(),
-                        e.getTitle(),
-                        e.getStartDateTime(),
-                        e.getAvailableSeats()
-                ))
-                .toList();
+        List<SearchPayloadDataInner> movieList = movieStream
+            .map(e -> (SearchPayloadDataInner) new Movie(
+                    e.getMovieId(),
+                    e.getTitle(),
+                    e.getStartDateTime(),
+                    e.getAvailableSeats()
+        )).toList();
         return new MovieListDTO(movieList, recordCount);
     }
 
@@ -56,14 +56,13 @@ public class MovieControllerImpl implements MovieController {
         Pageable moviePageable = PageRequest.of(page-1, this.chunkSize);
         Page<MovieEntity> moviePage = movieRepository.findAll(moviePageable);
         Stream<MovieEntity> movieStream = moviePage.get();
-        List<Movie> movieList = movieStream
-            .map(e -> new Movie(
+        List<SearchPayloadDataInner> movieList = movieStream
+            .map(e -> (SearchPayloadDataInner) new Movie(
                     e.getMovieId(),
                     e.getTitle(),
                     e.getStartDateTime(),
                     e.getAvailableSeats()
-            ))
-            .toList();
+            )).toList();
         return new MovieListDTO(movieList, moviePage.getTotalElements());
     }
 }

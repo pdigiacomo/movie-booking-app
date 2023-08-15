@@ -1,9 +1,15 @@
 package dgcplg.moviebooking.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @Configuration
-@EnableTransactionManagement
 public class MovieBookingConfiguration {
+    @Bean
+    public DateTimeFormatter getFormatter() {
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.US);
+    }
 }

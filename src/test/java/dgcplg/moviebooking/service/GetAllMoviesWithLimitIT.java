@@ -1,7 +1,8 @@
 package dgcplg.moviebooking.service;
 
 import dgcplg.moviebooking.OpenApiGeneratorApplication;
-import dgcplg.moviebooking.model.MovieList;
+import dgcplg.moviebooking.model.Payload;
+import dgcplg.moviebooking.model.SearchPayload;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,17 +32,18 @@ public class GetAllMoviesWithLimitIT {
 
     @Test
     public void getAllMovies_ok_withRecordLimit() {
-        ResponseEntity<MovieList> movieListEntity = testRestTemplate.getForEntity(
+        ResponseEntity<Payload> movieListResponseEntity = testRestTemplate.getForEntity(
                 "/v1/movie",
-                MovieList.class
+                Payload.class
         );
-        assert movieListEntity != null;
-        assert movieListEntity.getStatusCode().is2xxSuccessful();
-        assert movieListEntity.getBody() != null;
-        MovieList movieList = movieListEntity.getBody();
-        assert movieList.getStatus().getValue().equals("success");
-        assert movieList.getCount() == 5;
-        assert movieList.getData().size() == 2;
-        assert movieList.getType().equals("Movie");
+        assert movieListResponseEntity != null;
+        assert movieListResponseEntity.getStatusCode().is2xxSuccessful();
+        assert movieListResponseEntity.hasBody();
+        assert movieListResponseEntity.getBody() instanceof SearchPayload;
+        SearchPayload searchPayload = (SearchPayload) movieListResponseEntity.getBody();
+        assert searchPayload.getStatus().equals(SearchPayload.StatusEnum.SUCCESS);
+        assert searchPayload.getCount() != null && searchPayload.getCount() == 5;
+        assert searchPayload.getType().equals(SearchPayload.TypeEnum.MOVIE);
+        assert searchPayload.getData() != null && searchPayload.getData().size() == 2;
     }
 }

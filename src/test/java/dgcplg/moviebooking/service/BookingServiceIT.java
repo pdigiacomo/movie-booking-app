@@ -2,7 +2,8 @@ package dgcplg.moviebooking.service;
 
 import dgcplg.moviebooking.OpenApiGeneratorApplication;
 import dgcplg.moviebooking.model.Booking;
-import dgcplg.moviebooking.model.BookingResponse;
+import dgcplg.moviebooking.model.LookupPayload;
+import dgcplg.moviebooking.model.Payload;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,19 +25,19 @@ public class BookingServiceIT {
     @Test
     public void bookMovieSeats_ok() {
         Booking booking = new Booking(1L, 1L, 5);
-        ResponseEntity<BookingResponse> bookingResponseEntity = testRestTemplate.postForEntity(
+        ResponseEntity<Payload> bookingResponseEntity = testRestTemplate.postForEntity(
                 "/v1/booking",
                 booking,
-                BookingResponse.class
+                Payload.class
         );
         assert bookingResponseEntity != null;
         assert bookingResponseEntity.getStatusCode().isSameCodeAs(HttpStatus.CREATED);
         assert bookingResponseEntity.hasBody();
-        BookingResponse bookingResponse = bookingResponseEntity.getBody();
-        assert bookingResponse != null;
-        assert bookingResponse.getData() != null;
-        Booking newBooking = bookingResponse.getData();
-        assert newBooking.getBookingId() != null;
+        assert bookingResponseEntity.getBody() instanceof LookupPayload;
+        LookupPayload bookingPayload = (LookupPayload)bookingResponseEntity.getBody();
+        assert bookingPayload.getData() instanceof Booking;
+        Booking bookingResponse = (Booking) bookingPayload.getData();
+        assert bookingResponse.getBookingId() != null;
     }
 
     @Test

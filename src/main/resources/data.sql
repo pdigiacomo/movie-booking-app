@@ -5,3 +5,5 @@ INSERT INTO movie (title, start_datetime, available_seats) VALUES ('Meg 2: The T
 INSERT INTO movie (title, start_datetime, available_seats) VALUES ('Barbie', '2023-08-15T21:00:00Z', 50);
 
 INSERT INTO user (first_name, last_name) VALUES ('Pierluigi', 'Di Giacomo');
+
+INSERT INTO booking (movie_id, user_id, n_seats_booked) VALUES (1, 1, 5);

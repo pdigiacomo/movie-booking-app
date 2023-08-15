@@ -11,6 +11,8 @@ import dgcplg.moviebooking.repository.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.util.Optional;
+
 @Controller
 public class BookingControllerImpl implements BookingController {
     private final BookingRepository bookingRepository;
@@ -47,6 +49,11 @@ public class BookingControllerImpl implements BookingController {
 
     @Override
     public void cancelBooking(long bookingId) {
-        bookingRepository.deleteById(bookingId);
+        Optional<BookingEntity> cancelBookingOpt = bookingRepository.findById(bookingId);
+        BookingEntity cancelBooking = cancelBookingOpt.get();
+        MovieEntity cancelBookingMovie = cancelBooking.getMovie();
+        cancelBookingMovie.setAvailableSeats(cancelBookingMovie.getAvailableSeats() + cancelBooking.getnSeatsBooked());
+        movieRepository.save(cancelBookingMovie);
+        bookingRepository.delete(cancelBooking);
     }
 }
