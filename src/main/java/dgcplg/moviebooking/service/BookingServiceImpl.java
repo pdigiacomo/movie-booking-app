@@ -8,7 +8,6 @@ import dgcplg.moviebooking.exception.ExceptionToCodeEnumConverter;
 import dgcplg.moviebooking.model.Error;
 import dgcplg.moviebooking.model.*;
 import dgcplg.moviebooking.model.Error.CodeEnum;
-import org.hibernate.internal.util.ReflectHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
